@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EcoSense — Painel</title>
+<link rel="shortcut icon" href="logo-ecosense.svg" type="image/x-icon">
+<style>
+  /* === Paleta baseada no Figma enviado === */
+  :root{
+    --dark:#0f2b1f;
+    --panel:#1f442f;
+    --olive:#9db86a;
+    --muted:#cfe0b3;
+    --accent:#d6e8a9;
+    --danger:#f2b4a8;
+    --text:#f5f7f2;
+    --muted-text:rgba(245,247,242,0.75);
+    --glass: rgba(255,255,255,0.03);
+    --radius:12px;
+    --side-w:260px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;font-family: "Inter", Roboto, Arial, sans-serif;background:var(--dark);color:var(--text);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .app{display:flex;min-height:100vh;gap:18px}
+
+  /* SIDEBAR */
+  .sidebar{
+    width:var(--side-w);background:linear-gradient(180deg,var(--panel),rgba(10,30,20,0.9));
+    padding:20px 16px;display:flex;flex-direction:column;gap:18px;border-right:1px solid rgba(255,255,255,0.03)
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand img{width:48px;height:48px;object-fit:contain;border-radius:8px;cursor:pointer}
+  .brand h1{font-size:18px;letter-spacing:0.6px}
+  nav{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+  .nav-link{padding:10px;border-radius:10px;color:var(--muted-text);display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+  .nav-link:hover{background:var(--glass)}
+  .nav-link.active{background:var(--olive);color:var(--dark)}
+  .small{font-size:12px;color:var(--muted-text)}
+
+  /* MAIN */
+  .main{flex:1;padding:18px 22px;display:flex;flex-direction:column;gap:14px}
+  .topbar{display:flex;align-items:center;justify-content:space-between}
+  .hamburger{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;color:var(--muted-text);cursor:pointer}
+  .search{display:flex;align-items:center;gap:8px;background:var(--glass);padding:8px;border-radius:8px;min-width:220px}
+  .search input{background:transparent;border:0;color:var(--text);outline:none}
+
+  .status {display:flex;align-items:center;gap:12px;color:var(--muted-text)}
+  .logout {background:transparent;border:1px solid rgba(255,255,255,0.05);padding:6px 10px;border-radius:8px;cursor:pointer;color:var(--muted-text)}
+
+  /* Banner */
+  .banner{
+    height:160px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:18px;background:
+    linear-gradient(90deg,var(--muted) 0%, rgba(255,255,255,0.02) 35%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="180"><rect width="100%" height="100%" fill="%239db86a"/></svg>');
+    color:var(--dark);overflow:hidden;
+  }
+  .banner h2{font-size:20px}
+  .banner .logo-small{width:90px;height:42px;border-radius:6px;background:var(--dark);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800}
+
+  /* GRID CONTENT */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{background:var(--panel);padding:14px;border-radius:var(--radius);box-shadow:0 1px 0 rgba(0,0,0,0.3)}
+  .card h3{font-size:14px;margin-bottom:10px;color:var(--muted-text)}
+  .stat{font-weight:800;font-size:28px;color:var(--text)}
+
+  /* Score */
+  .score-number{font-weight:900;font-size:34px;color:var(--olive)}
+  .score-bar{height:12px;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden;margin-top:8px}
+  .score-fill{height:100%;background:linear-gradient(90deg,var(--olive),var(--accent));width:0%;border-radius:8px;transition:width .6s ease}
+
+  /* tabela simples (empresas) */
+  .table-wrap{overflow:auto;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border-radius:8px;padding:8px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+  th{background:transparent;color:var(--muted);font-weight:700}
+  td small{display:block;color:var(--muted-text)}
+
+  /* artigos (cards com imagem) */
+  .articles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .article-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:10px;border-radius:10px;display:flex;flex-direction:column;gap:8px}
+  .article-card img{height:110px;border-radius:8px;object-fit:cover;width:100%}
+  .article-card button{align-self:flex-start;padding:8px 10px;border-radius:8px;border:0;background:var(--olive);color:var(--dark);font-weight:700;cursor:pointer}
+
+  /* small responsive */
+  @media (max-width:1000px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .articles{grid-template-columns:repeat(2,1fr)}
+    :root{--side-w:72px}
+    .sidebar{width:var(--side-w)}
+    .brand h1{display:none}
+  }
+  @media (max-width:650px){
+    .app{flex-direction:column}
+    .sidebar{order:2;width:100%;display:flex;flex-direction:row;overflow:auto;border-top:1px solid rgba(255,255,255,0.03)}
+    .main{order:1;padding:12px}
+    .grid{grid-template-columns:1fr}
+    .articles{grid-template-columns:1fr}
+  }
+  .muted{color:var(--muted-text);font-size:13px}
+  .back{font-size:18px;cursor:pointer;color:var(--muted-text)}
+</style>
+</head>
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="logo-ecosense.svg" alt="Logo" id="brand-logo">
+        <h1 id="brand-title">EcoSense</h1>
+      </div>
+
+      <nav>
+        <!-- href aponta para páginas com mesmo nome; data-route mantém o SPA -->
+        <a class="nav-link active" data-route="home" href="home.html">🏠 Home</a>
+        <a class="nav-link" data-route="empresas" href="empresas.html">🏢 Empresas</a>
+        <a class="nav-link" data-route="artigos" href="artigos.html">📚 Artigos</a>
+        <a class="nav-link" data-route="dados" href="dados.html">➕ Adicionar Dados</a>
+        <a class="nav-link" data-route="certificados" href="certificados.html">🏅 Certificados</a>
+        <a class="nav-link" data-route="suporte" href="suporte.html">🛟 Suporte</a>
+        <a class="nav-link" data-route="perfil" href="perfil.html">👤 Perfil</a>
+      </nav>
+
+      <div style="flex:1"></div>
+      <div class="small" id="brand-foot">Protótipo</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="hamburger" id="toggle">☰</button>
+          <div class="muted" id="page-title">Dashboard</div>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="search"><span class="muted">🔎</span><input placeholder="Buscar..." id="search" /></div>
+          <div class="status">
+            <div id="user-email" class="muted">Convidado</div>
+            <button id="btn-logout" class="logout" title="Sair">Sair</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Routes / Views -->
+      <section id="view-home" class="route">
+        <div class="banner">
+          <div>
+            <h2 id="banner-title">Transformando juntos por um mundo melhor</h2>
+            <div class="muted" style="margin-top:6px" id="banner-sub">Painel EcoSense • Monitoramento ambiental</div>
+          </div>
+          <div class="logo-small" id="banner-logo">LOGO</div>
+        </div>
+
+        <div class="grid" style="margin-top:12px">
+          <div class="card">
+            <h3>Temperatura</h3>
+            <div class="stat" id="t-temp">25.6°C</div>
+            <div class="muted" style="margin-top:8px">Última atualização: há 3m</div>
+          </div>
+
+          <div class="card">
+            <h3>Umidade</h3>
+            <div class="stat" id="t-hum">48%</div>
+            <div class="muted" style="margin-top:8px">Última atualização: há 2m</div>
+          </div>
+
+          <div class="card">
+            <h3>Qualidade do ar</h3>
+            <div class="stat" id="t-iaq">Moderado</div>
+            <div class="muted" style="margin-top:8px">Índice AiQ</div>
+          </div>
+
+          <!-- Score card -->
+          <div class="card" style="grid-column: span 3;">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <h3>Score de Conformidade Ambiental</h3>
+                <div class="muted">Indicador de conformidade baseado em métricas e relatórios</div>
+              </div>
+              <div style="text-align:right">
+                <div class="score-number" id="score-num">--</div>
+                <div class="muted" style="font-size:13px">0-100</div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px">
+              <div class="score-bar"><div id="score-fill" class="score-fill"></div></div>
+              <div style="margin-top:8px" id="score-legend" class="muted">Carregando...</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Últimos alertas</h3>
+            <div class="muted">3 alertas ativos</div>
+            <ul style="margin-top:10px;list-style:none;padding-left:0">
+              <li style="display:flex;gap:10px;align-items:center;margin-top:8px"><div style="width:10px;height:10px;background:var(--danger);border-radius:50%"></div><div>Sensor A: Temp &gt; limite</div><small style="margin-left:auto" class="muted">5m</small></li>
+              <li style="display:flex;gap:10px;align-items:center;margin-top:8px"><div style="width:10px;height:10px;background:#f6a623;border-radius:50%"></div><div>Sensor C: qualidade do ar reduziu</div><small style="margin-left:auto" class="muted">20m</small></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Mapa</h3>
+            <div style="height:120px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);display:flex;align-items:center;justify-content:center" class="muted">Mapa (placeholder)</div>
+          </div>
+
+          <div class="card">
+            <h3>Relatórios rápidos</h3>
+            <div class="muted">Exportar por período</div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn" onclick="alert('Exportar CSV')">CSV</button>
+              <button class="btn ghost" onclick="alert('Exportar PDF')">PDF</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- other sections (empresas, artigos, etc.) are kept as routes loaded dynamically -->
+      <section id="view-empresas" class="route" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;gap:8px;align-items:center"><span class="back" onclick="go('home')">←</span><h3>Empresas</h3></div>
+        </div>
+        <div class="card"><div class="table-wrap"><table><thead><tr><th>Empresa</th><th>Setor</th><th>Carbono (tCO₂e)</th></tr></thead><tbody id="empresas-table"></tbody></table></div></div>
+      </section>
+
+      <section id="view-artigos" class="route" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="display:flex;gap:8px;align-items:center"><span class="back" onclick="go('home')">←</span><h3>Artigos</h3></div></div>
+        <div class="articles" id="articles-list"></div>
+      </section>
+
+      <section id="view-dados" class="route" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="display:flex;gap:8px;align-items:center"><span class="back" onclick="go('home')">←</span><h3>Adicionar dados</h3></div></div>
+        <div class="card"><div class="muted">Formulário de envio (placeholder)</div></div>
+      </section>
+
+      <section id="view-certificados" class="route" style="display:none"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="display:flex;gap:8px;align-items:center"><span class="back" onclick="go('home')">←</span><h3>Certificados</h3></div></div><div class="card"><div class="muted">Certificados / solicitações</div></div></section>
+
+      <section id="view-suporte" class="route" style="display:none"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="display:flex;gap:8px;align-items:center"><span class="back" onclick="go('home')">←</span><h3>Suporte</h3></div></div><div class="card"><div class="muted">Central de ajuda</div></div></section>
+
+      <section id="view-perfil" class="route" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="display:flex;gap:8px;align-items:center"><span class="back" onclick="go('home')">←</span><h3>Perfil</h3></div></div>
+        <div class="card" id="profile-card"></div>
+      </section>
+
+    </main>
+  </div>
+
+<script>
+  // Função que tenta obter o usuário ativo:
+  // 1) sessionStorage.ecosense_current (preferencial)
+  // 2) fallback localStorage.ecosense_user (se existir, cria a sessão automaticamente)
+  function getCurrentUser() {
+    try {
+      const sess = sessionStorage.getItem('ecosense_current');
+      if (sess) {
+        const u = JSON.parse(sess);
+        if (u && u.email) return u;
+      }
+    } catch(e){ console.warn('session read error', e); }
+
+    try {
+      const saved = localStorage.getItem('ecosense_user');
+      if (saved) {
+        const u = JSON.parse(saved);
+        if (u && u.email) {
+          // criar sessão automática para consistência
+          sessionStorage.setItem('ecosense_current', JSON.stringify(u));
+          return u;
+        }
+      }
+    } catch(e){ console.warn('localStorage read error', e); }
+
+    return null;
+  }
+
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) {
+    // não há sessão nem usuário cadastrado -> redireciona para index.html
+    window.location.href = 'index.html';
+  }
+
+  // Valores a exibir
+  const companyName = currentUser.empresa || currentUser.company || 'EcoSense';
+  const userEmail = currentUser.email || 'Convidado';
+
+  // Atualiza UI
+  document.getElementById('brand-title').textContent = companyName;
+  document.getElementById('user-email').textContent = userEmail + ' • Online';
+
+  // perfil card
+  const profileCard = document.getElementById('profile-card');
+  if (profileCard) {
+    profileCard.innerHTML = `<h3 class="muted">Conta</h3>
+      <p style="font-weight:800">${companyName}</p>
+      <p class="muted">${userEmail}</p>
+      <div style="margin-top:12px"><button class="btn" onclick="alert('Editar perfil (placeholder)')">Editar perfil</button></div>`;
+  }
+
+  // LOGOUT: limpar sessão e redirecionar para index imediatamente
+  const btnLogout = document.getElementById('btn-logout');
+  btnLogout.addEventListener('click', function(){
+    try { sessionStorage.removeItem('ecosense_current'); } catch(e){}
+    // garantir navegação
+    window.location.href = 'index.html';
+  });
+
+  // Logo clicável -> index
+  //document.getElementById('brand-logo').addEventListener('click', ()=> window.location.href='index.html');
+
+  // Simple SPA navigation (keeps SPA behavior) + allow links to open outside
+  const links = document.querySelectorAll('.nav-link');
+  const routes = document.querySelectorAll('.route');
+
+  function hideAll(){ routes.forEach(r=>r.style.display='none') }
+  function go(route){
+    hideAll();
+    document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
+    const link = Array.from(document.querySelectorAll('.nav-link')).find(l=>l.dataset.route===route);
+    if(link) link.classList.add('active');
+    const view = document.getElementById('view-'+route);
+    if(view) view.style.display='block';
+    document.getElementById('page-title').textContent = (route==='home') ? 'Dashboard' : (route.charAt(0).toUpperCase()+route.slice(1));
+  }
+
+  links.forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button===1) return;
+      e.preventDefault();
+      const r = a.dataset.route;
+      go(r);
+      history.pushState({route:r}, '', a.getAttribute('href'));
+    });
+  });
+
+  window.addEventListener('popstate', (ev)=>{
+    const path = location.pathname.split('/').pop().replace('.html','') || 'home';
+    const routeName = ['home','empresas','artigos','dados','certificados','suporte','perfil'].includes(path) ? path : 'home';
+    go(routeName);
+  });
+
+  // Toggle sidebar
+  document.getElementById('toggle').addEventListener('click', ()=>{
+    const sb = document.querySelector('.sidebar');
+    if(window.innerWidth <= 650){
+      sb.style.display = sb.style.display === 'none' ? 'flex' : 'none';
+    } else {
+      sb.style.width = sb.style.width === '72px' ? 'var(--side-w)' : '72px';
+    }
+  });
+
+  // Simulate sensor updates
+  function rand(base, varr=3){ return Math.round((base + (Math.random()-0.5)*varr)*10)/10; }
+  setInterval(()=>{
+    const tTemp = document.getElementById('t-temp');
+    const tHum = document.getElementById('t-hum');
+    const tIaq = document.getElementById('t-iaq');
+    if(tTemp) tTemp.textContent = rand(25,4) + '°C';
+    if(tHum) tHum.textContent = Math.max(15, Math.min(95, rand(48,14))) + '%';
+    if(tIaq) tIaq.textContent = ['Boa','Moderado','Ruim'][Math.floor(Math.random()*3)];
+  },3000);
+
+  // Score logic (persistent por usuário)
+  function getScoreForUser(email){
+    if(!email) return 0;
+    const key = 'ecosense_score_' + email;
+    let s = localStorage.getItem(key);
+    if(s) return parseInt(s,10);
+    const gen = Math.floor(Math.random()*51) + 50; // 50-100
+    localStorage.setItem(key, String(gen));
+    return gen;
+  }
+  function updateScoreUI(){
+    const score = getScoreForUser(userEmail);
+    const fill = document.getElementById('score-fill');
+    const num = document.getElementById('score-num');
+    const legend = document.getElementById('score-legend');
+    if(!fill || !num || !legend) return;
+    num.textContent = score;
+    fill.style.width = Math.min(100, Math.max(0, score)) + '%';
+    let txt = '';
+    if(score >= 85) txt = 'Excelente — forte conformidade';
+    else if(score >= 70) txt = 'Bom — algumas melhorias recomendadas';
+    else if(score >= 55) txt = 'Regular — atenção necessária';
+    else txt = 'Crítico — ações imediatas recomendadas';
+    legend.textContent = txt;
+  }
+  updateScoreUI();
+
+  // Seed demo data
+  (function seedDemo(){
+    const empresas = [
+      {nome:'Fazenda Alfa', setor:'Agronegócio', carbono:12},
+      {nome:'Comercorp', setor:'Varejo', carbono:85},
+      {nome:'Vale', setor:'Mineração', carbono:1250},
+    ];
+    const tbody = document.getElementById('empresas-table');
+    if(tbody) tbody.innerHTML = empresas.map(e=>`<tr><td><strong>${e.nome}</strong><small>${e.setor}</small></td><td>${e.setor}</td><td>${e.carbono}</td></tr>`).join('');
+    const arts = [
+      {title:'O que é ESG?', img:'https://picsum.photos/seed/esg/600/400'},
+      {title:'Redução de emissão', img:'https://picsum.photos/seed/energia/600/400'},
+      {title:'Reflorestamento', img:'https://picsum.photos/seed/plant/600/400'}
+    ];
+    const artWrap = document.getElementById('articles-list');
+    if(artWrap) artWrap.innerHTML = arts.map(a=>`<div class="article-card"><img src="${a.img}" alt=""><h4>${a.title}</h4><p class="muted">Resumo rápido</p><button>Ver artigo →</button></div>`).join('');
+  })();
+
+  // Start on home
+  go('home');
+</script>
+</body>
+</html>

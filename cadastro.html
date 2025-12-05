@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro — EcoSense</title>
+
+  <style>
+    :root {
+      --dark:#0f2b1f;
+      --panel:#1f442f;
+      --olive:#9db86a;
+      --muted:#cfe0b3;
+      --accent:#d6e8a9;
+      --text:#f5f7f2;
+      --muted-text:rgba(245,247,242,0.75);
+      --glass:rgba(255,255,255,0.04);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background:linear-gradient(180deg, var(--dark), #072218);
+      font-family:Inter, Arial, sans-serif;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      padding:20px;
+    }
+
+    .container {
+      background:var(--panel);
+      width:100%;
+      max-width:420px;
+      padding:28px;
+      border-radius:12px;
+      box-shadow:0 6px 25px rgba(0,0,0,0.5);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      animation:fade .4s ease;
+    }
+
+    @keyframes fade {
+      from { opacity:0; transform:translateY(10px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    .logo {
+      width:90px;
+      cursor:pointer;
+      margin-bottom:12px;
+    }
+
+    h2 {
+      color:var(--muted);
+      margin-bottom:18px;
+      font-size:22px;
+    }
+
+    .field {
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      margin-bottom:14px;
+    }
+
+    .field label {
+      font-size:14px;
+      color:var(--muted-text);
+      margin-bottom:6px;
+    }
+
+    .field input {
+      padding:10px;
+      border-radius:10px;
+      border:0;
+      outline:none;
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:15px;
+    }
+
+    .btn {
+      width:100%;
+      background:var(--olive);
+      color:var(--dark);
+      border:0;
+      padding:12px;
+      border-radius:10px;
+      font-weight:700;
+      font-size:15px;
+      cursor:pointer;
+      margin-top:10px;
+    }
+
+    .btn:hover {
+      opacity:0.9;
+    }
+
+    .back {
+      margin-top:16px;
+      font-size:14px;
+      color:var(--muted-text);
+      cursor:pointer;
+      text-decoration:underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- LOGO (voltar ao index) -->
+    <img src="logo-ecosense.svg" class="logo" onclick="window.location.href='index.html'" alt="EcoSense">
+
+    <h2>Criar Conta</h2>
+
+    <form id="cadastroForm">
+
+      <div class="field">
+        <label>Nome da Empresa</label>
+        <input type="text" id="empresa" required placeholder="Ex: Conceito Tecnologia">
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="email" required placeholder="contato@empresa.com">
+      </div>
+
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="senha" required placeholder="********">
+      </div>
+
+      <button type="submit" class="btn">Cadastrar</button>
+    </form>
+
+    <div class="back" onclick="window.location.href='index.html'">
+      Voltar para o início
+    </div>
+
+  </div>
+
+  <script>
+    // Evento de envio do formulário
+    document.getElementById("cadastroForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const empresa = document.getElementById("empresa").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+
+      if (!empresa || !email || !senha) {
+        alert("Preencha todos os campos!");
+        return;
+      }
+
+      // salvar no localStorage
+      const userData = {
+        empresa,
+        email,
+        senha
+      };
+
+      localStorage.setItem("ecosense_user", JSON.stringify(userData));
+
+      alert("Cadastro realizado com sucesso!");
+
+      // Redirecionar para index.html para login
+      window.location.href = "index.html";
+    });
+  </script>
+
+</body>
+</html>

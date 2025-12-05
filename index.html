@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EcoSense — Monitoramento Ambiental</title>
+  <meta name="description" content="EcoSense — plataforma de monitoramento ambiental, relatórios e certificação para melhores práticas ambientais." />
+
+  <style>
+    :root{
+      --dark:#0f2b1f;
+      --panel:#1f442f;
+      --olive:#9db86a;
+      --muted:#cfe0b3;
+      --accent:#d6e8a9;
+      --text:#f5f7f2;
+      --muted-text:rgba(245,247,242,0.75);
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --container:1200px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      height:100%;
+      font-family:Inter, Roboto, Arial, sans-serif;
+      background:linear-gradient(180deg,var(--dark),#072218);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--container);margin:0 auto;padding:28px}
+
+    /* Top navigation */
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:56px;height:56px;object-fit:contain}
+    .brand h1{font-size:20px;letter-spacing:.4px}
+
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{
+      color:var(--muted-text);
+      font-weight:700;
+      padding:8px 10px;
+      border-radius:8px;
+    }
+    nav a:hover{background:var(--glass)}
+    .cta{
+      background:var(--olive);
+      color:var(--dark);
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:800;
+    }
+
+    /* Hero */
+    .hero{display:flex;gap:28px;align-items:center;padding:28px 0}
+    .hero-left{flex:1;max-width:720px}
+    .hero h2{font-size:34px;line-height:1.05;margin-bottom:12px;color:var(--muted)}
+    .hero p{color:var(--muted-text);margin-bottom:18px;font-size:15px}
+    .actions{display:flex;gap:12px}
+
+    .btn{padding:12px 16px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+    .btn-primary{background:var(--olive);color:var(--dark)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted-text)}
+
+    .hero-right{flex:1;display:flex;align-items:center;justify-content:center}
+    .hero-card{
+      width:100%;
+      max-width:420px;
+      border-radius:14px;
+      padding:18px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);
+      box-shadow:0 6px 30px rgba(0,0,0,0.6)
+    }
+
+    .stat{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:12px 0}
+    .stat strong{font-size:20px}
+    .stat small{color:var(--muted-text)}
+
+    /* Features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+    .feature{background:var(--panel);padding:16px;border-radius:12px}
+    .feature h4{margin-bottom:8px;color:var(--muted)}
+    .feature p{color:var(--muted-text);font-size:14px}
+
+    /* Footer */
+    footer{
+      margin-top:34px;
+      padding:20px 0;
+      border-top:1px solid rgba(255,255,255,0.03);
+      display:flex;justify-content:space-between;align-items:center
+    }
+    .legal{color:var(--muted-text);font-size:13px}
+
+    /* Modal Login */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,0.6);
+      display:none;align-items:center;justify-content:center;
+      z-index:60;
+    }
+    .modal{
+      width:100%;max-width:420px;background:var(--panel);
+      padding:18px;border-radius:12px;
+    }
+    .close{background:transparent;border:0;color:var(--muted-text);font-size:18px;cursor:pointer}
+
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .field input{
+      padding:10px;border-radius:8px;border:0;
+      background:rgba(255,255,255,0.05);
+      color:var(--text);outline:none;
+    }
+
+    /* Responsivo */
+    @media(max-width:980px){
+      .features{grid-template-columns:repeat(2,1fr)}
+      .hero{flex-direction:column}
+    }
+    @media(max-width:650px){
+      .hero h2{font-size:26px}
+      .wrap{padding:16px}
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <img src="logo-ecosense.svg" alt="EcoSense">
+      <h1>EcoSense</h1>
+    </div>
+
+    <nav>
+      <a href="#sobre">Sobre</a>
+      <a href="#funcionalidades">Funcionalidades</a>
+      <a href="#precos">Preços</a>
+      <a href="#contato">Contato</a>
+      <a href="#" id="login-open" class="cta">Login</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="hero">
+      <div class="hero-left">
+        <h2>EcoSense — monitoramento ambiental inteligente para sua organização</h2>
+        <p>Coleta de dados em tempo real, dashboards interativos, alertas e certificação de boas práticas ambientais.</p>
+
+        <div class="actions">
+          <button class="btn btn-primary">Solicitar demonstração</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('login-open').click()">Entrar</button>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-card">
+          <div style="display:flex;justify-content:space-between">
+            <div>
+              <small class="muted">Última leitura</small>
+              <div style="font-weight:800;font-size:20px">Fazenda Alfa</div>
+              <div class="muted" style="font-size:13px">Temp • Umidade • IAQ</div>
+            </div>
+            <div style="text-align:right;color:var(--muted-text)">
+              <small>Conexão</small>
+              <div style="font-weight:800;color:var(--olive)">Online</div>
+            </div>
+          </div>
+
+          <div class="stat">
+            <div><small class="muted">Temperatura</small><strong id="stat-temp">25.6°C</strong></div>
+            <div><small class="muted">Umidade</small><strong id="stat-hum">48%</strong></div>
+          </div>
+
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn btn-ghost">Ver painel</button>
+            <button class="btn" style="background:var(--accent);color:var(--dark)">Exportar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="funcionalidades" style="margin-top:18px">
+      <h3 style="margin-bottom:12px;color:var(--muted)">Funcionalidades principais</h3>
+      <div class="features">
+        <div class="feature"><h4>Coleta em tempo real</h4><p>Sensores IoT com atualização imediata.</p></div>
+        <div class="feature"><h4>Dashboards</h4><p>Visualizações e relatórios completos.</p></div>
+        <div class="feature"><h4>Alertas</h4><p>Notificações inteligentes e automáticas.</p></div>
+        <div class="feature"><h4>Mapa Interativo</h4><p>Unidades e sensores geolocalizados.</p></div>
+        <div class="feature"><h4>Certificação</h4><p>Reconhecimento por boas práticas.</p></div>
+        <div class="feature"><h4>Segurança</h4><p>Perfis, permissões e autenticação.</p></div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" style="margin-top:28px">
+      <h3 style="margin-bottom:12px;color:var(--muted)">Entre em contato</h3>
+      <p class="muted">contato@ecosense.org • Petrópolis RJ</p>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="legal">© EcoSense 2025</div>
+    <div style="display:flex;gap:12px">
+      <a class="muted" href="#">Privacidade</a>
+      <a class="muted" href="#">Termos</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div>
+        <h3 style="margin-bottom:4px;color:var(--muted)">Entrar no EcoSense</h3>
+        <div class="muted">Acesse seu painel</div>
+      </div>
+      <button class="close" id="modal-close">✕</button>
+    </div>
+
+    <form id="loginForm" onsubmit="return false;">
+      <div class="field">
+        <label class="muted">E-mail</label>
+        <input id="li-email" type="email" required>
+      </div>
+
+      <div class="field">
+        <label class="muted">Senha</label>
+        <input id="li-pass" type="password" required>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-primary" type="submit">Entrar</button>
+        <button class="btn btn-ghost" type="button" onclick="openRegister()">Cadastrar</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+/* ===========================
+   MODAL CONTROLS
+=========================== */
+const modal = document.getElementById("modal");
+const loginOpen = document.getElementById("login-open");
+const modalClose = document.getElementById("modal-close");
+
+loginOpen.onclick = (e)=>{ e.preventDefault(); modal.style.display="flex"; };
+modalClose.onclick = ()=>{ modal.style.display="none"; };
+modal.onclick = (e)=>{ if(e.target===modal) modal.style.display="none"; };
+
+/* ===========================
+   DEMO SENSOR VALUES
+=========================== */
+function rand(b, v=3){ return Math.round((b+(Math.random()-0.5)*v)*10)/10; }
+setInterval(()=>{
+  document.getElementById("stat-temp").textContent = rand(25,4)+"°C";
+  document.getElementById("stat-hum").textContent = Math.max(10,rand(48,14))+"%";
+}, 2000);
+
+/* ===========================
+   LOGIN SYSTEM
+=========================== */
+
+// Fake usuário cliente
+const FIXED_EMAIL = "admin@conceito.com.br";
+const FIXED_PASS  = "12345";
+
+// Login
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const email = document.getElementById("li-email").value.trim();
+  const senha = document.getElementById("li-pass").value.trim();
+
+  // 1) valida usuário fixo
+  if(email === FIXED_EMAIL && senha === FIXED_PASS){
+    sessionStorage.setItem("ecosense_current", JSON.stringify({
+      email: email,
+      empresa: "Conceito"
+    }));
+    return window.location.href = "home.html";
+  }
+
+  // 2) tenta usuário cadastrado
+  const stored = localStorage.getItem("ecosense_user");
+  if(stored){
+    try {
+      const u = JSON.parse(stored);
+      if(u.email === email && u.senha === senha){
+        sessionStorage.setItem("ecosense_current", JSON.stringify(u));
+        return window.location.href = "home.html";
+      }
+    } catch(err){}
+  }
+
+  alert("Credenciais inválidas!");
+});
+
+// cadastro.html
+function openRegister(){
+  modal.style.display="none";
+  window.location.href="cadastro.html";
+}
+</script>
+
+</body>
+</html>
